@@ -1,0 +1,14 @@
+version: '3.5'
+services:
+  note-tracker-postgres:
+    image: postgis/postgis
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: note-tracker
+    volumes:
+      - note-tracker-db:/var/lib/postgresql/note-tracker
+volumes:
+  note-tracker-db:
