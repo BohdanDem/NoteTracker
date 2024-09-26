@@ -3,39 +3,56 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  ValidationPipe,
+  UsePipes,
+  Query,
+  Put,
 } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardService } from './board.service';
+import { BoardEntity } from '../../database/entities/board.entity';
+import { QueryBoardDto } from './dto/query-board.dto';
+import { BoardsResponseInterface } from './types/boardsResponse.interface';
+import { DeleteResult } from 'typeorm';
 
 @Controller('board')
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
   @Post()
-  create(@Body() createBoardDto: CreateBoardDto) {
-    return this.boardService.create(createBoardDto);
+  @UsePipes(new ValidationPipe())
+  async createBoard(
+    @Body() createBoardDto: CreateBoardDto,
+  ): Promise<BoardEntity> {
+    return await this.boardService.createBoard(createBoardDto);
   }
 
   @Get()
-  findAll() {
-    return this.boardService.findAll();
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async getAllBoards(
+    @Query() query: QueryBoardDto,
+  ): Promise<BoardsResponseInterface> {
+    return await this.boardService.getAllBoards(query);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.boardService.findOne(+id);
+  async getBoardById(@Param('id') id: string): Promise<BoardEntity> {
+    return await this.boardService.getBoardById(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBoardDto: any) {
-    return this.boardService.update(+id, updateBoardDto);
+  @Put(':id')
+  @UsePipes(new ValidationPipe())
+  async updateBoard(
+    @Param('id') id: string,
+    @Body() updateBoardDto: CreateBoardDto,
+  ): Promise<BoardEntity> {
+    return await this.boardService.updateBoard(id, updateBoardDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.boardService.remove(+id);
+  async deleteBoard(@Param('id') id: string): Promise<DeleteResult> {
+    return await this.boardService.deleteBoard(id);
   }
 }
