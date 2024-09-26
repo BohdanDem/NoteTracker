@@ -1,6 +1,6 @@
-import { DataSource } from 'typeorm';
+const typeorm = require('typeorm');
 
-const dataSource = new DataSource({
+const dataSource = new typeorm.DataSource({
   name: 'default',
   type: 'postgres',
   host: '0.0.0.0',
@@ -15,4 +15,4 @@ const dataSource = new DataSource({
   migrations: ['src/database/migrations/*{.js,.ts}'],
 });
 
-export default dataSource;
+module.exports = [dataSource];
