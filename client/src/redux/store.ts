@@ -1,17 +1,12 @@
-import {configureStore} from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
 
 const store = configureStore({
-    reducer: {}
-})
+  reducer: {},
+});
 
-type RootState = ReturnType<typeof store.getState>
-type AppDispatch = typeof store.dispatch
+type RootState = ReturnType<typeof store.getState>;
+type AppDispatch = typeof store.dispatch;
 
-export type {
-    RootState,
-    AppDispatch
-}
+export type { RootState, AppDispatch };
 
-export {
-    store
-}
+export { store };
