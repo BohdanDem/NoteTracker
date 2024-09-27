@@ -1,10 +1,11 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, DeleteResult } from 'typeorm';
 import { BoardEntity } from '../../database/entities/board.entity';
 import { BoardsResponseInterface } from './types/boardsResponse.interface';
 import { QueryBoardDto } from './dto/query-board.dto';
+import { findBoardByIdOrException } from '../../common/utils/board-utils';
 
 @Injectable()
 export class BoardService {
@@ -24,6 +25,7 @@ export class BoardService {
     const queryBuilder = this.dataSource
       .getRepository(BoardEntity)
       .createQueryBuilder('board');
+    // .leftJoinAndSelect('board.cards', 'cards');
 
     const offset = query.page - 1;
 
@@ -45,28 +47,20 @@ export class BoardService {
   }
 
   async getBoardById(id: string): Promise<BoardEntity> {
-    return await this.findBoardByIdOrException(id);
+    return await findBoardByIdOrException(this.boardRepository, id);
   }
 
   async updateBoard(
     id: string,
     updateBoardDto: CreateBoardDto,
   ): Promise<BoardEntity> {
-    const board = await this.findBoardByIdOrException(id);
+    const board = await findBoardByIdOrException(this.boardRepository, id);
     this.boardRepository.merge(board, updateBoardDto);
     return await this.boardRepository.save(board);
   }
 
   async deleteBoard(id: string): Promise<DeleteResult> {
-    const board = await this.findBoardByIdOrException(id);
+    const board = await findBoardByIdOrException(this.boardRepository, id);
     return await this.boardRepository.delete(board.id);
-  }
-
-  private async findBoardByIdOrException(id: string): Promise<BoardEntity> {
-    const board = await this.boardRepository.findOneBy({ id });
-    if (!board) {
-      throw new UnprocessableEntityException('Board not found');
-    }
-    return board;
   }
 }

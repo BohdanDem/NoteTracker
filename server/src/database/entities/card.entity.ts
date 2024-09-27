@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+} from 'typeorm';
 import { CardStateEnum } from '../../common/enum/card.state.enum';
 import { BoardEntity } from './board.entity';
 
@@ -16,6 +22,9 @@ export class CardEntity {
   @Column({ type: 'enum', enum: CardStateEnum })
   state: CardStateEnum;
 
-  @ManyToOne(() => BoardEntity, (board) => board.cards)
+  @ManyToOne(() => BoardEntity, (board) => board.cards, { onDelete: 'CASCADE' })
   board: BoardEntity;
+
+  @CreateDateColumn({ name: 'createdAt' })
+  createdAt: Date;
 }

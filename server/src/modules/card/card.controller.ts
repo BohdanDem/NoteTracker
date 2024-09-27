@@ -3,39 +3,57 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  UsePipes,
+  ValidationPipe,
+  Query,
+  Put,
 } from '@nestjs/common';
 import { CardService } from './card.service';
 import { CreateCardDto } from './dto/create-card.dto';
+import { CardEntity } from '../../database/entities/card.entity';
+import { QueryCardDto } from './dto/query-card.dto';
+import { CardsResponseInterface } from './types/cardsResponse.interface';
+import { GetCardsDto } from './dto/get-cards.dto';
+import { UpdateCardDto } from './dto/update-card.dto';
+import { DeleteResult } from 'typeorm';
 
 @Controller('card')
 export class CardController {
   constructor(private readonly cardService: CardService) {}
 
   @Post()
-  create(@Body() createCardDto: CreateCardDto) {
-    return this.cardService.create(createCardDto);
+  @UsePipes(new ValidationPipe())
+  async createCard(@Body() createCardDto: CreateCardDto): Promise<CardEntity> {
+    return await this.cardService.createCard(createCardDto);
   }
 
   @Get()
-  findAll() {
-    return this.cardService.findAll();
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async getAllCardsByBoardId(
+    @Query() query: QueryCardDto,
+    @Body() getCardsDto: GetCardsDto,
+  ): Promise<CardsResponseInterface> {
+    return await this.cardService.getAllCardsByBoardId(query, getCardsDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cardService.findOne(+id);
+  async getCardById(@Param('id') id: string): Promise<CardEntity> {
+    return await this.cardService.getCardById(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCardDto: any) {
-    return this.cardService.update(+id, updateCardDto);
+  @Put(':id')
+  @UsePipes(new ValidationPipe())
+  async updateCard(
+    @Param('id') id: string,
+    @Body() updateCardDto: UpdateCardDto,
+  ): Promise<CardEntity> {
+    return await this.cardService.updateCard(id, updateCardDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cardService.remove(+id);
+  async deleteCard(@Param('id') id: string): Promise<DeleteResult> {
+    return await this.cardService.deleteCard(id);
   }
 }

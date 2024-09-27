@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/type-orm.config';
 import { BoardModule } from './modules/board/board.module';
 import { CheckIdMiddleware } from './common/middleware/checkId.middleware';
+import { CardModule } from './modules/card/card.module';
 
 @Module({
-  imports: [TypeOrmModule.forRootAsync(typeOrmConfig), BoardModule],
+  imports: [TypeOrmModule.forRootAsync(typeOrmConfig), BoardModule, CardModule],
   controllers: [AppController],
   providers: [AppService],
 })
