@@ -5,7 +5,7 @@ import {
   ManyToOne,
   CreateDateColumn,
 } from 'typeorm';
-import { CardStateEnum } from '../../common/enum/card.state.enum';
+import { CardStateEnum } from '../../../../shared/enum/card.state.enum';
 import { BoardEntity } from './board.entity';
 
 @Entity({ name: 'card' })

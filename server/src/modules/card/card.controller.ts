@@ -17,7 +17,7 @@ import { QueryCardDto } from './dto/query-card.dto';
 import { GetCardsDto } from './dto/get-cards.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
 import { DeleteResult } from 'typeorm';
-import { ResponseInterface } from '../../common/types/response.interface';
+import { ResponseInterface } from '../../../../shared/types/response.interface';
 
 @Controller('card')
 export class CardController {
