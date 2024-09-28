@@ -3,9 +3,9 @@ import { CreateBoardDto } from './dto/create-board.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, DeleteResult } from 'typeorm';
 import { BoardEntity } from '../../database/entities/board.entity';
-import { BoardsResponseInterface } from './types/boardsResponse.interface';
 import { QueryBoardDto } from './dto/query-board.dto';
 import { findBoardByIdOrException } from '../../common/utils/board-utils';
+import { ResponseInterface } from '../../common/types/response.interface';
 
 @Injectable()
 export class BoardService {
@@ -21,11 +21,12 @@ export class BoardService {
     return await this.boardRepository.save(board);
   }
 
-  async getAllBoards(query: QueryBoardDto): Promise<BoardsResponseInterface> {
+  async getAllBoards(
+    query: QueryBoardDto,
+  ): Promise<ResponseInterface<BoardEntity>> {
     const queryBuilder = this.dataSource
       .getRepository(BoardEntity)
       .createQueryBuilder('board');
-    // .leftJoinAndSelect('board.cards', 'cards');
 
     const offset = query.page - 1;
 
@@ -40,9 +41,9 @@ export class BoardService {
     return {
       limit: query.limit,
       page: query.page,
-      boardCount,
-      boardCountPerPage,
-      boards,
+      itemCount: boardCount,
+      itemCountPerPage: boardCountPerPage,
+      data: boards,
     };
   }
 

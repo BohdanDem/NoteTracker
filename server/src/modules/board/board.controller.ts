@@ -14,8 +14,8 @@ import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardService } from './board.service';
 import { BoardEntity } from '../../database/entities/board.entity';
 import { QueryBoardDto } from './dto/query-board.dto';
-import { BoardsResponseInterface } from './types/boardsResponse.interface';
 import { DeleteResult } from 'typeorm';
+import { ResponseInterface } from '../../common/types/response.interface';
 
 @Controller('board')
 export class BoardController {
@@ -33,7 +33,7 @@ export class BoardController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async getAllBoards(
     @Query() query: QueryBoardDto,
-  ): Promise<BoardsResponseInterface> {
+  ): Promise<ResponseInterface<BoardEntity>> {
     return await this.boardService.getAllBoards(query);
   }
 

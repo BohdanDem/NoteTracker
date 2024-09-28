@@ -6,10 +6,10 @@ import { DataSource, DeleteResult, Repository } from 'typeorm';
 import { CardStateEnum } from '../../common/enum/card.state.enum';
 import { BoardEntity } from '../../database/entities/board.entity';
 import { QueryCardDto } from './dto/query-card.dto';
-import { CardsResponseInterface } from './types/cardsResponse.interface';
 import { findBoardByIdOrException } from '../../common/utils/board-utils';
 import { GetCardsDto } from './dto/get-cards.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
+import { ResponseInterface } from '../../common/types/response.interface';
 
 @Injectable()
 export class CardService {
@@ -38,7 +38,7 @@ export class CardService {
   async getAllCardsByBoardId(
     query: QueryCardDto,
     getCardsDto: GetCardsDto,
-  ): Promise<CardsResponseInterface> {
+  ): Promise<ResponseInterface<CardEntity>> {
     const queryBuilder = this.dataSource
       .getRepository(CardEntity)
       .createQueryBuilder('card');
@@ -59,9 +59,9 @@ export class CardService {
     return {
       limit: query.limit,
       page: query.page,
-      cardCount,
-      cardCountPerPage,
-      cards,
+      itemCount: cardCount,
+      itemCountPerPage: cardCountPerPage,
+      data: cards,
     };
   }
 

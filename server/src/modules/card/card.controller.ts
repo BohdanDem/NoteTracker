@@ -14,10 +14,10 @@ import { CardService } from './card.service';
 import { CreateCardDto } from './dto/create-card.dto';
 import { CardEntity } from '../../database/entities/card.entity';
 import { QueryCardDto } from './dto/query-card.dto';
-import { CardsResponseInterface } from './types/cardsResponse.interface';
 import { GetCardsDto } from './dto/get-cards.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
 import { DeleteResult } from 'typeorm';
+import { ResponseInterface } from '../../common/types/response.interface';
 
 @Controller('card')
 export class CardController {
@@ -34,7 +34,7 @@ export class CardController {
   async getAllCardsByBoardId(
     @Query() query: QueryCardDto,
     @Body() getCardsDto: GetCardsDto,
-  ): Promise<CardsResponseInterface> {
+  ): Promise<ResponseInterface<CardEntity>> {
     return await this.cardService.getAllCardsByBoardId(query, getCardsDto);
   }
 
