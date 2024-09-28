@@ -37,29 +37,29 @@ const createBoard = createAsyncThunk<void, { board: IBoard }>(
   },
 );
 
-// const updateTodo = createAsyncThunk<void, { id: string; todo: ITodoCreate }>(
-//   'todosSlice/updateTodo',
-//   async ({ id, todo }, { rejectWithValue }) => {
-//     try {
-//       await todoService.updateById(id, todo);
-//     } catch (e) {
-//       const err = e as AxiosError;
-//       return rejectWithValue(err.response.data);
-//     }
-//   },
-// );
-//
-// const deleteTodo = createAsyncThunk<void, { id: string }>(
-//   'todosSlice/deleteTodo',
-//   async ({ id }, { rejectWithValue }) => {
-//     try {
-//       await todoService.deleteById(id);
-//     } catch (e) {
-//       const err = e as AxiosError;
-//       return rejectWithValue(err.response.data);
-//     }
-//   },
-// );
+const updateBoard = createAsyncThunk<void, { id: string; board: IBoard }>(
+  'boardsSlice/updateBoard',
+  async ({ id, board }, { rejectWithValue }) => {
+    try {
+      await boardService.updateById(id, board);
+    } catch (e) {
+      const err = e as AxiosError;
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
+
+const deleteBoard = createAsyncThunk<void, { id: string }>(
+  'boardsSlice/deleteBoard',
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      await boardService.deleteById(id);
+    } catch (e) {
+      const err = e as AxiosError;
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
 
 const boardsSlice = createSlice({
   name: 'boardsSlice',
@@ -81,6 +81,8 @@ const boardsActions = {
   ...actions,
   getAllBoards,
   createBoard,
+  deleteBoard,
+  updateBoard,
 };
 
 export { boardsActions, boardsReducer };

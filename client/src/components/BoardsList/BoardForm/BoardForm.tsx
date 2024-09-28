@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import styles from './BoardForm.module.css';
-import { useAppDispatch } from '../../../hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import { IBoard } from '../../../interfaces/board.interface';
 import { boardsActions } from '../../../redux/slices/boardsSlice';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { boardValidator } from '../../../validators/board.validator';
+import { boardForUpdateActions } from '../../../redux/slices/boardForUpdateSlice';
 
 const BoardForm = () => {
   const dispatch = useAppDispatch();
+  const { boardForUpdate } = useAppSelector((state) => state.boardForUpdate);
 
   const {
     reset,
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<IBoard>({
@@ -20,9 +23,26 @@ const BoardForm = () => {
     resolver: joiResolver(boardValidator),
   });
 
-  const createBoard: SubmitHandler<IBoard> = async (board): Promise<void> => {
+  useEffect(() => {
+    if (boardForUpdate) {
+      setValue('name', boardForUpdate.name);
+    }
+  }, [boardForUpdate, setValue]);
+
+  const createBoard: SubmitHandler<IBoard> = async (
+    board: IBoard,
+  ): Promise<void> => {
     await dispatch(boardsActions.createBoard({ board }));
     await dispatch(boardsActions.getAllBoards());
+    reset();
+  };
+
+  const updateBoard: SubmitHandler<IBoard> = async (
+    board: IBoard,
+  ): Promise<void> => {
+    await dispatch(boardsActions.updateBoard({ id: boardForUpdate.id, board }));
+    await dispatch(boardsActions.getAllBoards());
+    dispatch(boardForUpdateActions.setBoardForUpdate({ board: null }));
     reset();
   };
 
@@ -39,8 +59,11 @@ const BoardForm = () => {
           <span className={styles.error}>{errors.name.message}</span>
         )}
       </div>
-      <button className={styles.button} onClick={handleSubmit(createBoard)}>
-        CREATE
+      <button
+        className={styles.button}
+        onClick={handleSubmit(boardForUpdate ? updateBoard : createBoard)}
+      >
+        {boardForUpdate ? 'UPDATE' : 'CREATE'}
       </button>
     </form>
   );

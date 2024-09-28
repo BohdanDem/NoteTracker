@@ -1,6 +1,11 @@
 import React, { FC, PropsWithChildren } from 'react';
 import styles from './Board.module.css';
 import { IBoard } from '../../../interfaces/board.interface';
+import { ReactComponent as UpdateIcon } from '../../../images/update.svg';
+import { ReactComponent as BasketIcon } from '../../../images/basket.svg';
+import { useAppDispatch } from '../../../hooks/reduxHooks';
+import { boardsActions } from '../../../redux/slices/boardsSlice';
+import { boardForUpdateActions } from '../../../redux/slices/boardForUpdateSlice';
 
 interface IProps extends PropsWithChildren {
   board: IBoard;
@@ -8,14 +13,38 @@ interface IProps extends PropsWithChildren {
 
 const Board: FC<IProps> = ({ board }) => {
   const { id, name } = board;
+  const dispatch = useAppDispatch();
+
+  const deleteBoard = async () => {
+    await dispatch(boardsActions.deleteBoard({ id }));
+    await dispatch(boardsActions.getAllBoards());
+  };
 
   return (
     <div className={styles.board}>
-      <div>
-        name: <b>{name}</b>
+      <div className={styles.info}>
+        <div>
+          name: <b>{name}</b>
+        </div>
+        <div>
+          board Id: <b>{id}</b>
+        </div>
       </div>
-      <div>
-        board Id: <b>{id}</b>
+      <div className={styles.icons}>
+        <UpdateIcon
+          onClick={() =>
+            dispatch(boardForUpdateActions.setBoardForUpdate({ board }))
+          }
+          className={styles.icon}
+          width={38}
+          height={38}
+        />
+        <BasketIcon
+          onClick={deleteBoard}
+          className={styles.icon}
+          width={32}
+          height={32}
+        />
       </div>
     </div>
   );
