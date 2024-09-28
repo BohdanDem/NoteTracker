@@ -15,7 +15,7 @@ import { BoardService } from './board.service';
 import { BoardEntity } from '../../database/entities/board.entity';
 import { QueryBoardDto } from './dto/query-board.dto';
 import { DeleteResult } from 'typeorm';
-import { ResponseInterface } from '../../../../shared/types/response.interface';
+import { ResponseInterface } from '../../common/types/response.interface';
 
 @Controller('board')
 export class BoardController {

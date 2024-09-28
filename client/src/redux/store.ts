@@ -1,7 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { boardsReducer } from './slices/boardsSlice';
 
 const store = configureStore({
-  reducer: {},
+  reducer: {
+    boards: boardsReducer,
+  },
 });
 
 type RootState = ReturnType<typeof store.getState>;

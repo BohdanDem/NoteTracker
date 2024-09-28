@@ -5,7 +5,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { CardStateEnum } from '../../../../../shared/enum/card.state.enum';
+import { CardStateEnum } from '../../../common/enum/card.state.enum';
 
 export class UpdateCardDto {
   @IsOptional()

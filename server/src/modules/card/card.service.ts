@@ -3,13 +3,13 @@ import { CreateCardDto } from './dto/create-card.dto';
 import { CardEntity } from '../../database/entities/card.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, DeleteResult, Repository } from 'typeorm';
-import { CardStateEnum } from '../../../../shared/enum/card.state.enum';
+import { CardStateEnum } from '../../common/enum/card.state.enum';
 import { BoardEntity } from '../../database/entities/board.entity';
 import { QueryCardDto } from './dto/query-card.dto';
 import { findBoardByIdOrException } from '../../common/utils/board-utils';
 import { GetCardsDto } from './dto/get-cards.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
-import { ResponseInterface } from '../../../../shared/types/response.interface';
+import { ResponseInterface } from '../../common/types/response.interface';
 
 @Injectable()
 export class CardService {

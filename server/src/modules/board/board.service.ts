@@ -5,7 +5,7 @@ import { Repository, DataSource, DeleteResult } from 'typeorm';
 import { BoardEntity } from '../../database/entities/board.entity';
 import { QueryBoardDto } from './dto/query-board.dto';
 import { findBoardByIdOrException } from '../../common/utils/board-utils';
-import { ResponseInterface } from '../../../../shared/types/response.interface';
+import { ResponseInterface } from '../../common/types/response.interface';
 
 @Injectable()
 export class BoardService {

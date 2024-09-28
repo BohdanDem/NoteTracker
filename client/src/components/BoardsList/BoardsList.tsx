@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { boardsActions } from '../../redux/slices/boardsSlice';
+import styles from './BoardsList.module.css';
+import Board from './Board/Board';
+import BoardForm from './BoardForm/BoardForm';
 
 const BoardsList = () => {
-    return (
-        <div>
-            BoardsList
-        </div>
-    );
+  const dispatch = useAppDispatch();
+  const { data } = useAppSelector((state) => state.boards);
+
+  useEffect(() => {
+    dispatch(boardsActions.getAllBoards());
+  }, []);
+
+  return (
+    <div className={styles.main}>
+      <BoardForm />
+      {data && data.map((board) => <Board key={board.id} board={board} />)}
+    </div>
+  );
 };
 
 export default BoardsList;
