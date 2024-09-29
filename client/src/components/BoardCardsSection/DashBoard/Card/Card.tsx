@@ -3,6 +3,9 @@ import styles from './Card.module.css';
 import { ReactComponent as UpdateIcon } from '../../../../images/update.svg';
 import { ReactComponent as BasketIcon } from '../../../../images/basket.svg';
 import { ICard } from '../../../../interfaces/card.interface';
+import { useAppDispatch } from '../../../../hooks/reduxHooks';
+import { modalStateActions } from '../../../../redux/slices/modalStateSlice';
+import { cardForUpdateActions } from '../../../../redux/slices/cardForUpdateSlice';
 
 interface IProps extends PropsWithChildren {
   card: ICard;
@@ -10,18 +13,27 @@ interface IProps extends PropsWithChildren {
 
 const Card: FC<IProps> = ({ card }) => {
   const { title, description } = card;
+  const dispatch = useAppDispatch();
+
+  const openModal = () => {
+    dispatch(modalStateActions.setModalActive({ state: true }));
+    dispatch(cardForUpdateActions.setCardForUpdate({ card }));
+  };
 
   return (
-    <div>
-      <div className={styles.info}>
-        <div>
-          <b>{title}</b>
-        </div>
-        <div>{description}</div>
+    <div className={styles.card}>
+      <div>
+        <b>{title}</b>
       </div>
+      <div>{description}</div>
       <div className={styles.icons}>
-        <UpdateIcon className={styles.icon} width={25} height={25} />
-        <BasketIcon className={styles.icon} width={20} height={20} />
+        <UpdateIcon
+          onClick={openModal}
+          className={styles.icon}
+          width={30}
+          height={30}
+        />
+        <BasketIcon className={styles.icon} width={25} height={25} />
       </div>
     </div>
   );

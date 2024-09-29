@@ -4,6 +4,8 @@ import { cardsActions } from '../../../redux/slices/cardsSlice';
 import { ICard } from '../../../interfaces/card.interface';
 import styles from './DashBoard.module.css';
 import Card from './Card/Card';
+import AddCard from './AddCard/AddCard';
+import CardForm from './CardForm/CardForm';
 
 const DashBoard = () => {
   const dispatch = useAppDispatch();
@@ -33,24 +35,32 @@ const DashBoard = () => {
       {data.length > 0 ? (
         <>
           <div className={styles.column}>
+            <h3>To Do</h3>
+            <AddCard />
             {todoCards.map((card: ICard) => (
               <Card card={card} />
             ))}
           </div>
           <div className={styles.column}>
+            <h3>In Progress</h3>
             {inProgressCards.map((card: ICard) => (
               <Card card={card} />
             ))}
           </div>
           <div className={styles.column}>
+            <h3>Done</h3>
             {doneCards.map((card: ICard) => (
               <Card card={card} />
             ))}
           </div>
         </>
       ) : (
-        <div className={styles.empty}>No cards available in this board</div>
+        <div className={styles.empty}>
+          <div>No cards available in this board</div>
+          <AddCard />
+        </div>
       )}
+      <CardForm />
     </div>
   );
 };

@@ -1,0 +1,44 @@
+.card {
+    width: 80%;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 4px;
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3),
+    0 -2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.card:hover {
+    cursor: pointer;
+}
+
+.card>div {
+    font-family: Montserrat Alternates, sans-serif;
+    font-size: 18px;
+}
+
+.card>div:first-child {
+    margin-bottom: 7px;
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.icon {
+    margin: 0 3px;
+    display: flex;
+    align-items: center;
+    transition: linear 0.15s;
+}
+
+.icon:hover {
+    cursor: pointer;
+    fill: #f14949;
+    transition: linear 0.15s;
+}

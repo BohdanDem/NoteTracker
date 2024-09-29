@@ -1,0 +1,73 @@
+.modal {
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.5s;
+}
+
+.modal_active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal_content {
+    font-family: Montserrat Alternates, sans-serif;
+    border: none;
+    background-color: #f3f3f3;
+    width: 600px;
+    transform: scale(0.5);
+    transition: 0.3s all;
+}
+
+.modal_content_active {
+    transform: scale(1);
+}
+
+.block {
+    position: relative;
+}
+
+.cross {
+    position: absolute;
+    cursor: pointer;
+    width: 22px;
+    height: 22px;
+    right: 25px;
+    top: 22px;
+    font-size: 22px;
+    border-radius: 50%;
+    border: none;
+    background-color: inherit;
+    transition: linear 0.15s;
+}
+
+.cross:hover {
+    font-size: 26px;
+    right: 27px;
+    top: 20px;
+    backface-visibility: hidden;
+    transition: linear 0.15s;
+}
+
+.form {
+    margin: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+}

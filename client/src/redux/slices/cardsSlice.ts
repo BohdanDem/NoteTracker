@@ -25,18 +25,18 @@ const getAllCards = createAsyncThunk<
   }
 });
 
-// const createBoard = createAsyncThunk<void, { board: IBoard }>(
-//   'boardsSlice/createBoard',
-//   async ({ board }, { rejectWithValue }) => {
-//     try {
-//       await boardService.create(board);
-//     } catch (e) {
-//       const err = e as AxiosError;
-//       return rejectWithValue(err.response.data);
-//     }
-//   },
-// );
-//
+const createCard = createAsyncThunk<void, { card: ICard }>(
+  'cardsSlice/createCard',
+  async ({ card }, { rejectWithValue }) => {
+    try {
+      await cardService.create(card);
+    } catch (e) {
+      const err = e as AxiosError;
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
+
 // const updateBoard = createAsyncThunk<void, { id: string; board: IBoard }>(
 //   'boardsSlice/updateBoard',
 //   async ({ id, board }, { rejectWithValue }) => {
@@ -80,6 +80,7 @@ const { reducer: cardsReducer, actions } = cardsSlice;
 const cardsActions = {
   ...actions,
   getAllCards,
+  createCard,
 };
 
 export { cardsActions, cardsReducer };
