@@ -7,7 +7,7 @@ export class QueryBoardDto {
   @Min(0)
   @Max(50)
   @IsOptional()
-  readonly limit?: number = 10;
+  readonly limit?: number = 6;
 
   @Type(() => Number)
   @IsInt()

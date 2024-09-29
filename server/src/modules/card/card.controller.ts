@@ -14,7 +14,6 @@ import { CardService } from './card.service';
 import { CreateCardDto } from './dto/create-card.dto';
 import { CardEntity } from '../../database/entities/card.entity';
 import { QueryCardDto } from './dto/query-card.dto';
-import { GetCardsDto } from './dto/get-cards.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
 import { DeleteResult } from 'typeorm';
 import { ResponseInterface } from '../../common/types/response.interface';
@@ -33,9 +32,8 @@ export class CardController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async getAllCardsByBoardId(
     @Query() query: QueryCardDto,
-    @Body() getCardsDto: GetCardsDto,
   ): Promise<ResponseInterface<CardEntity>> {
-    return await this.cardService.getAllCardsByBoardId(query, getCardsDto);
+    return await this.cardService.getAllCardsByBoardId(query);
   }
 
   @Get(':id')

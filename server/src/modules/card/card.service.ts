@@ -7,7 +7,6 @@ import { CardStateEnum } from '../../common/enum/card.state.enum';
 import { BoardEntity } from '../../database/entities/board.entity';
 import { QueryCardDto } from './dto/query-card.dto';
 import { findBoardByIdOrException } from '../../common/utils/board-utils';
-import { GetCardsDto } from './dto/get-cards.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
 import { ResponseInterface } from '../../common/types/response.interface';
 
@@ -37,7 +36,6 @@ export class CardService {
 
   async getAllCardsByBoardId(
     query: QueryCardDto,
-    getCardsDto: GetCardsDto,
   ): Promise<ResponseInterface<CardEntity>> {
     const queryBuilder = this.dataSource
       .getRepository(CardEntity)
@@ -46,7 +44,7 @@ export class CardService {
     const offset = query.page - 1;
 
     queryBuilder.where('card.boardId = :boardId', {
-      boardId: getCardsDto.boardId,
+      boardId: query.boardId,
     });
     queryBuilder.limit(query.limit);
     queryBuilder.offset(offset * query.limit);
