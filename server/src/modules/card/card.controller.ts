@@ -9,6 +9,7 @@ import {
   ValidationPipe,
   Query,
   Put,
+  Patch,
 } from '@nestjs/common';
 import { CardService } from './card.service';
 import { CreateCardDto } from './dto/create-card.dto';
@@ -17,6 +18,7 @@ import { QueryCardDto } from './dto/query-card.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
 import { DeleteResult } from 'typeorm';
 import { ResponseInterface } from '../../common/types/response.interface';
+import { UpdateCardStateOrderDto } from './dto/update-card-state-order.dto';
 
 @Controller('card')
 export class CardController {
@@ -48,6 +50,18 @@ export class CardController {
     @Body() updateCardDto: UpdateCardDto,
   ): Promise<CardEntity> {
     return await this.cardService.updateCard(id, updateCardDto);
+  }
+
+  @Patch(':id')
+  @UsePipes(new ValidationPipe())
+  async updateCardStateOrder(
+    @Param('id') id: string,
+    @Body() updateCardStateOrderDto: UpdateCardStateOrderDto,
+  ): Promise<CardEntity> {
+    return await this.cardService.updateCardStateOrder(
+      id,
+      updateCardStateOrderDto,
+    );
   }
 
   @Delete(':id')

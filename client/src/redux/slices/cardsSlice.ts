@@ -50,6 +50,21 @@ const updateCard = createAsyncThunk<void, { id: string; card: ICard }>(
   },
 );
 
+const updateCardStateOrder = createAsyncThunk<
+  void,
+  { id: string; card: Partial<ICard> }
+>(
+  'cardsSlice/updateCardStateOrder',
+  async ({ id, card }, { rejectWithValue }) => {
+    try {
+      await cardService.updateCardStateOrder(id, card);
+    } catch (e) {
+      const err = e as AxiosError;
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
+
 const deleteCard = createAsyncThunk<void, { id: string }>(
   'cardsSlice/deleteCard',
   async ({ id }, { rejectWithValue }) => {
@@ -75,6 +90,7 @@ const cardsSlice = createSlice({
       if (card) {
         card.state = newState as CardStateEnum;
       }
+      console.log(card.order);
     },
   },
   extraReducers: (builder) =>
@@ -94,6 +110,7 @@ const cardsActions = {
   getAllCards,
   createCard,
   updateCard,
+  updateCardStateOrder,
   deleteCard,
 };
 

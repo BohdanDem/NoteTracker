@@ -5,4 +5,5 @@ export interface ICard {
   title: string;
   description: string;
   state: CardStateEnum;
+  order: number;
 }

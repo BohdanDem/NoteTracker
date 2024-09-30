@@ -9,6 +9,8 @@ const cardService = {
   create: (data: ICard): IRes<ICard> => apiService.post(urls.card.base, data),
   updateById: (id: string, data: Partial<ICard>): IRes<ICard> =>
     apiService.put(urls.card.byId(id), data),
+  updateCardStateOrder: (id: string, data: Partial<ICard>): IRes<ICard> =>
+    apiService.patch(urls.card.byId(id), data),
   deleteById: (id: string): IRes<void> => apiService.delete(urls.card.byId(id)),
 };
 

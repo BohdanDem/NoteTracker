@@ -22,6 +22,9 @@ export class CardEntity {
   @Column({ type: 'enum', enum: CardStateEnum })
   state: CardStateEnum;
 
+  @Column()
+  order: number;
+
   @ManyToOne(() => BoardEntity, (board) => board.cards, { onDelete: 'CASCADE' })
   board: BoardEntity;
 

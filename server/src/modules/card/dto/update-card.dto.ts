@@ -1,11 +1,4 @@
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
-import { CardStateEnum } from '../../../common/enum/card.state.enum';
+import { IsNotEmpty, IsOptional, MaxLength, MinLength } from 'class-validator';
 
 export class UpdateCardDto {
   @IsOptional()
@@ -19,9 +12,4 @@ export class UpdateCardDto {
   @MinLength(3)
   @MaxLength(50)
   readonly description: string;
-
-  @IsOptional()
-  @IsNotEmpty()
-  @IsEnum(CardStateEnum)
-  readonly state: CardStateEnum;
 }

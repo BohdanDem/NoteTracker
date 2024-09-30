@@ -52,11 +52,10 @@ const DashBoard = () => {
     if (card && card.state !== newState) {
       dispatch(cardsActions.updateCardState({ id: cardId, state: newState }));
       const updatedCard = {
-        ...card,
         state: newState as CardStateEnum,
       };
       dispatch(
-        cardsActions.updateCard({
+        cardsActions.updateCardStateOrder({
           id: cardId,
           card: updatedCard,
         }),
