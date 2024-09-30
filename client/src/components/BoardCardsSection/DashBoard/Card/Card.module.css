@@ -18,6 +18,7 @@
 .card>div {
     font-family: Montserrat Alternates, sans-serif;
     font-size: 18px;
+    line-height: 1.4;
 }
 
 .card>div:first-child {

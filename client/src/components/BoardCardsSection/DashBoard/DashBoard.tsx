@@ -32,34 +32,42 @@ const DashBoard = () => {
 
   return (
     <div className={styles.main}>
-      {data.length > 0 ? (
-        <>
-          <div className={styles.column}>
-            <h3>To Do</h3>
+      {boardId ? (
+        data.length > 0 ? (
+          <>
+            <div className={styles.column}>
+              <h3>To Do</h3>
+              <AddCard />
+              <div className={styles.wrapper}>
+                {todoCards.map((card: ICard) => (
+                  <Card key={card.id} card={card} />
+                ))}
+              </div>
+            </div>
+            <div className={styles.column}>
+              <h3>In Progress</h3>
+              <div className={styles.wrapper}>
+                {inProgressCards.map((card: ICard) => (
+                  <Card key={card.id} card={card} />
+                ))}
+              </div>
+            </div>
+            <div className={styles.column}>
+              <h3>Done</h3>
+              <div className={styles.wrapper}>
+                {doneCards.map((card: ICard) => (
+                  <Card key={card.id} card={card} />
+                ))}
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className={styles.empty}>
+            <div>No cards available in this board</div>
             <AddCard />
-            {todoCards.map((card: ICard) => (
-              <Card card={card} />
-            ))}
           </div>
-          <div className={styles.column}>
-            <h3>In Progress</h3>
-            {inProgressCards.map((card: ICard) => (
-              <Card card={card} />
-            ))}
-          </div>
-          <div className={styles.column}>
-            <h3>Done</h3>
-            {doneCards.map((card: ICard) => (
-              <Card card={card} />
-            ))}
-          </div>
-        </>
-      ) : (
-        <div className={styles.empty}>
-          <div>No cards available in this board</div>
-          <AddCard />
-        </div>
-      )}
+        )
+      ) : null}
       <CardForm />
     </div>
   );

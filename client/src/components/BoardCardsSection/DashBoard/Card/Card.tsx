@@ -6,18 +6,25 @@ import { ICard } from '../../../../interfaces/card.interface';
 import { useAppDispatch } from '../../../../hooks/reduxHooks';
 import { modalStateActions } from '../../../../redux/slices/modalStateSlice';
 import { cardForUpdateActions } from '../../../../redux/slices/cardForUpdateSlice';
+import { cardsActions } from '../../../../redux/slices/cardsSlice';
 
 interface IProps extends PropsWithChildren {
   card: ICard;
 }
 
 const Card: FC<IProps> = ({ card }) => {
-  const { title, description } = card;
+  const { title, description, id } = card;
   const dispatch = useAppDispatch();
 
   const openModal = () => {
     dispatch(modalStateActions.setModalActive({ state: true }));
     dispatch(cardForUpdateActions.setCardForUpdate({ card }));
+  };
+
+  const deleteCard = async () => {
+    const boardId = localStorage.getItem('boardId');
+    await dispatch(cardsActions.deleteCard({ id }));
+    await dispatch(cardsActions.getAllCards({ boardId }));
   };
 
   return (
@@ -33,7 +40,12 @@ const Card: FC<IProps> = ({ card }) => {
           width={30}
           height={30}
         />
-        <BasketIcon className={styles.icon} width={25} height={25} />
+        <BasketIcon
+          onClick={deleteCard}
+          className={styles.icon}
+          width={25}
+          height={25}
+        />
       </div>
     </div>
   );

@@ -37,29 +37,29 @@ const createCard = createAsyncThunk<void, { card: ICard }>(
   },
 );
 
-// const updateBoard = createAsyncThunk<void, { id: string; board: IBoard }>(
-//   'boardsSlice/updateBoard',
-//   async ({ id, board }, { rejectWithValue }) => {
-//     try {
-//       await boardService.updateById(id, board);
-//     } catch (e) {
-//       const err = e as AxiosError;
-//       return rejectWithValue(err.response.data);
-//     }
-//   },
-// );
-//
-// const deleteBoard = createAsyncThunk<void, { id: string }>(
-//   'boardsSlice/deleteBoard',
-//   async ({ id }, { rejectWithValue }) => {
-//     try {
-//       await boardService.deleteById(id);
-//     } catch (e) {
-//       const err = e as AxiosError;
-//       return rejectWithValue(err.response.data);
-//     }
-//   },
-// );
+const updateCard = createAsyncThunk<void, { id: string; card: ICard }>(
+  'cardsSlice/updateCard',
+  async ({ id, card }, { rejectWithValue }) => {
+    try {
+      await cardService.updateById(id, card);
+    } catch (e) {
+      const err = e as AxiosError;
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
+
+const deleteCard = createAsyncThunk<void, { id: string }>(
+  'cardsSlice/deleteCard',
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      await cardService.deleteById(id);
+    } catch (e) {
+      const err = e as AxiosError;
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
 
 const cardsSlice = createSlice({
   name: 'cardsSlice',
@@ -81,6 +81,8 @@ const cardsActions = {
   ...actions,
   getAllCards,
   createCard,
+  updateCard,
+  deleteCard,
 };
 
 export { cardsActions, cardsReducer };

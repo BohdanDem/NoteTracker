@@ -14,12 +14,12 @@ const CardForm = () => {
   const dispatch = useAppDispatch();
   const { isModalActive } = useAppSelector((state) => state.modalState);
   const { cardForUpdate } = useAppSelector((state) => state.cardForUpdate);
-  const { boardId } = useAppSelector((state) => state.boardId);
 
   const {
     reset,
     register,
     setValue,
+    setError,
     handleSubmit,
     formState: { errors },
   } = useForm<ICard>({
@@ -35,9 +35,18 @@ const CardForm = () => {
   }, [cardForUpdate, setValue]);
 
   const send: SubmitHandler<ICard> = async (card: ICard): Promise<void> => {
-    await dispatch(cardsActions.createCard({ card }));
-    dispatch(cardsActions.getAllCards({ boardId }));
+    const boardId = localStorage.getItem('boardId');
+    const data = { boardId, ...card };
+
+    if (cardForUpdate) {
+      await dispatch(cardsActions.updateCard({ id: cardForUpdate.id, card }));
+    } else {
+      await dispatch(cardsActions.createCard({ card: data }));
+    }
+
+    await dispatch(cardsActions.getAllCards({ boardId }));
     reset();
+    closeModal();
   };
 
   const closeModal = () => {
@@ -45,6 +54,8 @@ const CardForm = () => {
     dispatch(cardForUpdateActions.setCardForUpdate({ card: null }));
     setValue('title', null);
     setValue('description', null);
+    setError('title', null);
+    setError('description', null);
   };
 
   return ReactDOM.createPortal(
@@ -79,9 +90,8 @@ const CardForm = () => {
               )}
             </div>
             <div className={styles.field}>
-              <input
-                className={styles.input}
-                type="text"
+              <textarea
+                className={styles.textarea}
                 placeholder={'Input board description'}
                 {...register('description')}
               />
