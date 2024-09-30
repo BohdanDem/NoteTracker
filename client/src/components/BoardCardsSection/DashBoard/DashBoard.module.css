@@ -41,3 +41,11 @@
     align-items: center;
     overflow-y: auto;
 }
+
+.error {
+    margin-top: 10px;
+    font-size: 16px;
+    color: red;
+    display: flex;
+    justify-content: center;
+}

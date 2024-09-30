@@ -11,6 +11,7 @@ import { boardForUpdateActions } from '../../../redux/slices/boardForUpdateSlice
 const BoardForm = () => {
   const dispatch = useAppDispatch();
   const { boardForUpdate } = useAppSelector((state) => state.boardForUpdate);
+  const { page } = useAppSelector((state) => state.boards);
 
   const {
     reset,
@@ -33,7 +34,7 @@ const BoardForm = () => {
     board: IBoard,
   ): Promise<void> => {
     await dispatch(boardsActions.createBoard({ board }));
-    await dispatch(boardsActions.getAllBoards());
+    await dispatch(boardsActions.getAllBoards({ page }));
     reset();
   };
 
@@ -41,7 +42,7 @@ const BoardForm = () => {
     board: IBoard,
   ): Promise<void> => {
     await dispatch(boardsActions.updateBoard({ id: boardForUpdate.id, board }));
-    await dispatch(boardsActions.getAllBoards());
+    await dispatch(boardsActions.getAllBoards({ page }));
     dispatch(boardForUpdateActions.setBoardForUpdate({ board: null }));
     reset();
   };

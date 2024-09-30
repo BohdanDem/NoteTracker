@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { ResponseInterface } from '../../../../server/src/common/types/response.interface';
 import { IBoard } from '../../interfaces/board.interface';
@@ -12,18 +12,18 @@ const initialState: ResponseInterface<IBoard> = {
   data: [],
 };
 
-const getAllBoards = createAsyncThunk<ResponseInterface<IBoard>>(
-  'boardsSlice/getAllBoards',
-  async (_, { rejectWithValue }) => {
-    try {
-      const { data } = await boardService.getAll();
-      return data;
-    } catch (e) {
-      const err = e as AxiosError;
-      return rejectWithValue(err.response.data);
-    }
-  },
-);
+const getAllBoards = createAsyncThunk<
+  ResponseInterface<IBoard>,
+  { page: number }
+>('boardsSlice/getAllBoards', async ({ page }, { rejectWithValue }) => {
+  try {
+    const { data } = await boardService.getAll(page);
+    return data;
+  } catch (e) {
+    const err = e as AxiosError;
+    return rejectWithValue(err.response.data);
+  }
+});
 
 const createBoard = createAsyncThunk<void, { board: IBoard }>(
   'boardsSlice/createBoard',
@@ -64,7 +64,11 @@ const deleteBoard = createAsyncThunk<void, { id: string }>(
 const boardsSlice = createSlice({
   name: 'boardsSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    setNewPage: (state, action: PayloadAction<{ page: number }>) => {
+      state.page = action.payload.page;
+    },
+  },
   extraReducers: (builder) =>
     builder.addCase(getAllBoards.fulfilled, (state, action) => {
       state.limit = action.payload.limit;

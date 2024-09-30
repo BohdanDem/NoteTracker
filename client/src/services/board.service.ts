@@ -4,8 +4,8 @@ import { ResponseInterface } from '../../../server/src/common/types/response.int
 import { IBoard } from '../interfaces/board.interface';
 
 const boardService = {
-  getAll: (): IRes<ResponseInterface<IBoard>> =>
-    apiService.get(urls.board.base),
+  getAll: (page: number): IRes<ResponseInterface<IBoard>> =>
+    apiService.get(urls.board.base, { params: { page } }),
   create: (data: IBoard): IRes<IBoard> =>
     apiService.post(urls.board.base, data),
   updateById: (id: string, data: Partial<IBoard>): IRes<IBoard> =>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { FC, PropsWithChildren, useEffect } from 'react';
 import styles from './CardForm.module.css';
 import ReactDOM from 'react-dom';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
@@ -10,7 +10,11 @@ import { ICard } from '../../../../interfaces/card.interface';
 import { cardsActions } from '../../../../redux/slices/cardsSlice';
 import { cardForUpdateActions } from '../../../../redux/slices/cardForUpdateSlice';
 
-const CardForm = () => {
+interface IProps extends PropsWithChildren {
+  setResponseError: (value: string) => void;
+}
+
+const CardForm: FC<IProps> = ({ setResponseError }) => {
   const dispatch = useAppDispatch();
   const { isModalActive } = useAppSelector((state) => state.modalState);
   const { cardForUpdate } = useAppSelector((state) => state.cardForUpdate);
@@ -41,7 +45,12 @@ const CardForm = () => {
     if (cardForUpdate) {
       await dispatch(cardsActions.updateCard({ id: cardForUpdate.id, card }));
     } else {
-      await dispatch(cardsActions.createCard({ card: data }));
+      const response: any = await dispatch(
+        cardsActions.createCard({ card: data }),
+      );
+      if (response.payload?.statusCode === 422) {
+        setResponseError('The board with this Id does not exist');
+      }
     }
 
     await dispatch(cardsActions.getAllCards({ boardId }));
