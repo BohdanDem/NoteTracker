@@ -1,4 +1,4 @@
-import { CardStateEnum } from '../../../server/src/common/enum/card.state.enum';
+import { CardStateEnum } from '../constants/card.state.enum';
 
 export interface ICard {
   id?: string;

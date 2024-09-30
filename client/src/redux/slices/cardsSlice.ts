@@ -1,8 +1,9 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { ResponseInterface } from '../../../../server/src/common/types/response.interface';
 import { ICard } from '../../interfaces/card.interface';
 import { cardService } from '../../services/card.service';
+import { CardStateEnum } from '../../constants/card.state.enum';
 
 const initialState: ResponseInterface<ICard> = {
   limit: null,
@@ -64,7 +65,18 @@ const deleteCard = createAsyncThunk<void, { id: string }>(
 const cardsSlice = createSlice({
   name: 'cardsSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    updateCardState: (
+      state,
+      action: PayloadAction<{ id: string; state: string }>,
+    ) => {
+      const { id, state: newState } = action.payload;
+      const card = state.data.find((card) => card.id === id);
+      if (card) {
+        card.state = newState as CardStateEnum;
+      }
+    },
+  },
   extraReducers: (builder) =>
     builder.addCase(getAllCards.fulfilled, (state, action) => {
       state.limit = action.payload.limit;

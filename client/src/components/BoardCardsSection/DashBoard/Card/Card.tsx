@@ -27,8 +27,13 @@ const Card: FC<IProps> = ({ card }) => {
     await dispatch(cardsActions.getAllCards({ boardId }));
   };
 
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    e.dataTransfer.setData('cardId', id);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
   return (
-    <div className={styles.card}>
+    <div className={styles.card} draggable onDragStart={handleDragStart}>
       <div>
         <b>{title}</b>
       </div>
