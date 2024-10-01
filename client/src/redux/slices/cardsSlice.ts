@@ -81,7 +81,7 @@ const cardsSlice = createSlice({
   name: 'cardsSlice',
   initialState,
   reducers: {
-    updateCardState: (
+    updateCardStateOrderLocal: (
       state,
       action: PayloadAction<{ id: string; state: string }>,
     ) => {

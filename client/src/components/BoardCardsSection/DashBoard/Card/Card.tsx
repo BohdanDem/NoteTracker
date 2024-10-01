@@ -1,4 +1,5 @@
 import React, { FC, PropsWithChildren } from 'react';
+import { useDraggable } from '@dnd-kit/core';
 import styles from './Card.module.css';
 import { ReactComponent as UpdateIcon } from '../../../../images/update.svg';
 import { ReactComponent as BasketIcon } from '../../../../images/basket.svg';
@@ -10,9 +11,11 @@ import { cardsActions } from '../../../../redux/slices/cardsSlice';
 
 interface IProps extends PropsWithChildren {
   card: ICard;
+  index: number;
+  columnName: string;
 }
 
-const Card: FC<IProps> = ({ card }) => {
+const Card: FC<IProps> = ({ card, index, columnName }) => {
   const { title, description, id } = card;
   const dispatch = useAppDispatch();
 
@@ -27,13 +30,18 @@ const Card: FC<IProps> = ({ card }) => {
     await dispatch(cardsActions.getAllCards({ boardId }));
   };
 
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    e.dataTransfer.setData('cardId', id);
-    e.dataTransfer.effectAllowed = 'move';
-  };
+  const { attributes, listeners, setNodeRef } = useDraggable({
+    id: card.id,
+    data: { index, columnName },
+  });
 
   return (
-    <div className={styles.card} draggable onDragStart={handleDragStart}>
+    <div
+      ref={setNodeRef}
+      className={styles.card}
+      {...listeners}
+      {...attributes}
+    >
       <div>
         <b>{title}</b>
       </div>

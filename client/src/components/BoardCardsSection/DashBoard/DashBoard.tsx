@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import { DndContext, DragEndEvent, DragOverlay } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import { cardsActions } from '../../../redux/slices/cardsSlice';
 import { ICard } from '../../../interfaces/card.interface';
 import styles from './DashBoard.module.css';
 import Card from './Card/Card';
-import AddCard from './AddCard/AddCard';
 import CardForm from './CardForm/CardForm';
 import { boardIdActions } from '../../../redux/slices/boardIdSlice';
 import { CardStateEnum } from '../../../constants/card.state.enum';
+import { DroppableColumn } from './DroppableColumn/DroppableColumn';
+import AddCard from './AddCard/AddCard';
 
 const DashBoard = () => {
   const dispatch = useAppDispatch();
   const [error, setError] = useState<string | null>(null);
+  const [activeCard, setActiveCard] = useState<ICard | null>(null);
   const { data } = useAppSelector((state) => state.cards);
   const { boardId } = useAppSelector((state) => state.boardId);
 
   useEffect(() => {
     const boardId = localStorage.getItem('boardId');
-
     if (boardId) {
       dispatch(boardIdActions.setBoardId({ boardId }));
       dispatch(cardsActions.getAllCards({ boardId }));
@@ -34,88 +36,53 @@ const DashBoard = () => {
     }
   }, [error]);
 
-  const todoCards: ICard[] = data
-    .filter((card: ICard) => card.state === CardStateEnum['to do'])
-    .sort((a, b) => b.order - a.order);
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
 
-  const inProgressCards: ICard[] = data
-    .filter((card: ICard) => card.state === CardStateEnum['in progress'])
-    .sort((a, b) => b.order - a.order);
+    if (over) {
+      const cardId = active.id as string;
+      const newState = over.id as CardStateEnum;
+      const card = data.find((card) => card.id === cardId);
 
-  const doneCards: ICard[] = data
-    .filter((card: ICard) => card.state === CardStateEnum.done)
-    .sort((a, b) => b.order - a.order);
+      if (card && card.state !== newState) {
+        dispatch(
+          cardsActions.updateCardStateOrderLocal({
+            id: cardId,
+            state: newState,
+          }),
+        );
+        const updatedCard = {
+          state: newState as CardStateEnum,
+        };
+        dispatch(
+          cardsActions.updateCardStateOrder({
+            id: cardId,
+            card: updatedCard,
+          }),
+        );
+      }
+    }
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>, newState: string) => {
-    e.preventDefault();
-    const cardId = e.dataTransfer.getData('cardId');
+    setActiveCard(null);
+  };
+
+  const handleDragStart = (event: any) => {
+    const cardId = event.active.id as string;
     const card = data.find((card) => card.id === cardId);
-
-    if (card && card.state !== newState) {
-      dispatch(cardsActions.updateCardState({ id: cardId, state: newState }));
-      const updatedCard = {
-        state: newState as CardStateEnum,
-      };
-      dispatch(
-        cardsActions.updateCardStateOrder({
-          id: cardId,
-          card: updatedCard,
-        }),
-      );
+    if (card) {
+      setActiveCard(card);
     }
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-  };
-
-  // data.forEach((el) => console.log(el.title, el.order));
-
   return (
-    <>
+    <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
       <div className={styles.main}>
         {boardId ? (
           data.length > 0 ? (
             <>
-              <div
-                className={styles.column}
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, CardStateEnum['to do'])}
-              >
-                <h3>To Do</h3>
-                <AddCard />
-                <div className={styles.wrapper}>
-                  {todoCards.map((card: ICard) => (
-                    <Card key={card.id} card={card} />
-                  ))}
-                </div>
-              </div>
-
-              <div
-                className={styles.column}
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, CardStateEnum['in progress'])}
-              >
-                <h3>In Progress</h3>
-                <div className={styles.wrapper}>
-                  {inProgressCards.map((card: ICard) => (
-                    <Card key={card.id} card={card} />
-                  ))}
-                </div>
-              </div>
-
-              <div
-                className={styles.column}
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, CardStateEnum.done)}
-              >
-                <h3>Done</h3>
-                <div className={styles.wrapper}>
-                  {doneCards.map((card: ICard) => (
-                    <Card key={card.id} card={card} />
-                  ))}
-                </div>
-              </div>
+              <DroppableColumn id={CardStateEnum['to do']} />
+              <DroppableColumn id={CardStateEnum['in progress']} />
+              <DroppableColumn id={CardStateEnum.done} />
             </>
           ) : (
             <div className={styles.empty}>
@@ -126,8 +93,19 @@ const DashBoard = () => {
         ) : null}
         <CardForm setResponseError={setError} />
       </div>
+
+      <DragOverlay>
+        {activeCard ? (
+          <Card
+            card={activeCard}
+            index={0}
+            columnName={activeCard.state as string}
+          />
+        ) : null}
+      </DragOverlay>
+
       {error && <span className={styles.error}>{error}</span>}
-    </>
+    </DndContext>
   );
 };
 

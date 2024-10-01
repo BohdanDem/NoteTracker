@@ -213,7 +213,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"boardId\": \"400629a9-ebb3-4cc9-a78b-306fcb47c514\"\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -221,7 +221,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/card",
+							"raw": "http://localhost:5000/card?boardId=400629a9-ebb3-4cc9-a78b-306fcb47c514",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -233,13 +233,17 @@
 							"query": [
 								{
 									"key": "limit",
-									"value": "3",
+									"value": "1",
 									"disabled": true
 								},
 								{
 									"key": "page",
-									"value": "2",
+									"value": "1",
 									"disabled": true
+								},
+								{
+									"key": "boardId",
+									"value": "400629a9-ebb3-4cc9-a78b-306fcb47c514"
 								}
 							]
 						}
