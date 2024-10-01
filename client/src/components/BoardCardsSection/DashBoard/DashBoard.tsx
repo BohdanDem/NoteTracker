@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { DndContext, DragEndEvent, DragOverlay } from '@dnd-kit/core';
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  KeyboardSensor,
+  MouseSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import { cardsActions } from '../../../redux/slices/cardsSlice';
 import { ICard } from '../../../interfaces/card.interface';
@@ -74,8 +82,20 @@ const DashBoard = () => {
     }
   };
 
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      distance: 10,
+    },
+  });
+  const keyboardSensor = useSensor(KeyboardSensor);
+  const sensors = useSensors(mouseSensor, keyboardSensor);
+
   return (
-    <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+    <DndContext
+      sensors={sensors}
+      onDragEnd={handleDragEnd}
+      onDragStart={handleDragStart}
+    >
       <div className={styles.main}>
         {boardId ? (
           data.length > 0 ? (

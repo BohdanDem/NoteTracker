@@ -88,13 +88,7 @@ export class CardService {
     id: string,
     updateCardStateOrderDto: UpdateCardStateOrderDto,
   ): Promise<CardEntity> {
-    const card = await this.cardRepository.findOne({
-      where: { id },
-      relations: ['board'],
-    });
-    if (!card) {
-      throw new UnprocessableEntityException('Card not found');
-    }
+    const card = await this.findCardByIdOrException(id);
 
     await this.cardRepository
       .createQueryBuilder()
@@ -123,11 +117,23 @@ export class CardService {
 
   async deleteCard(id: string): Promise<DeleteResult> {
     const card = await this.findCardByIdOrException(id);
+    await this.cardRepository
+      .createQueryBuilder()
+      .update(CardEntity)
+      .set({ order: () => '"order" - 1' })
+      .where('boardId = :boardId', { boardId: card.board.id })
+      .andWhere('state = :state', { state: card.state })
+      .andWhere('"order" > :order', { order: card.order })
+      .execute();
+
     return await this.cardRepository.delete(card.id);
   }
 
   private async findCardByIdOrException(id: string): Promise<CardEntity> {
-    const card = await this.cardRepository.findOneBy({ id });
+    const card = await this.cardRepository.findOne({
+      where: { id },
+      relations: ['board'],
+    });
     if (!card) {
       throw new UnprocessableEntityException('Card not found');
     }
