@@ -86,11 +86,27 @@ const cardsSlice = createSlice({
       action: PayloadAction<{ id: string; state: string }>,
     ) => {
       const { id, state: newState } = action.payload;
-      const card = state.data.find((card) => card.id === id);
+      const updatedData = state.data.slice();
+      const card = updatedData.find((card) => card.id === id);
+
       if (card) {
+        updatedData
+          .filter(
+            (item) => item.state === card.state && item.order > card.order,
+          )
+          .forEach((item) => {
+            item.order -= 1;
+          });
+
+        const cardsInNewStateCount = updatedData.filter(
+          (item) => item.state === newState,
+        ).length;
+
         card.state = newState as CardStateEnum;
+        card.order = cardsInNewStateCount + 1;
+
+        state.data = updatedData;
       }
-      console.log(card.order);
     },
   },
   extraReducers: (builder) =>

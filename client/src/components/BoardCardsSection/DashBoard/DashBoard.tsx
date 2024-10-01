@@ -34,15 +34,17 @@ const DashBoard = () => {
     }
   }, [error]);
 
-  const todoCards: ICard[] = data.filter(
-    (card: ICard) => card.state === CardStateEnum['to do'],
-  );
-  const inProgressCards: ICard[] = data.filter(
-    (card: ICard) => card.state === CardStateEnum['in progress'],
-  );
-  const doneCards: ICard[] = data.filter(
-    (card: ICard) => card.state === CardStateEnum.done,
-  );
+  const todoCards: ICard[] = data
+    .filter((card: ICard) => card.state === CardStateEnum['to do'])
+    .sort((a, b) => b.order - a.order);
+
+  const inProgressCards: ICard[] = data
+    .filter((card: ICard) => card.state === CardStateEnum['in progress'])
+    .sort((a, b) => b.order - a.order);
+
+  const doneCards: ICard[] = data
+    .filter((card: ICard) => card.state === CardStateEnum.done)
+    .sort((a, b) => b.order - a.order);
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>, newState: string) => {
     e.preventDefault();
@@ -66,6 +68,8 @@ const DashBoard = () => {
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
+
+  // data.forEach((el) => console.log(el.title, el.order));
 
   return (
     <>

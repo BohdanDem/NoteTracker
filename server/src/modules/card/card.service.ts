@@ -96,6 +96,15 @@ export class CardService {
       throw new UnprocessableEntityException('Card not found');
     }
 
+    await this.cardRepository
+      .createQueryBuilder()
+      .update(CardEntity)
+      .set({ order: () => '"order" - 1' })
+      .where('boardId = :boardId', { boardId: card.board.id })
+      .andWhere('state = :state', { state: card.state })
+      .andWhere('"order" > :order', { order: card.order })
+      .execute();
+
     if (updateCardStateOrderDto.state !== card.state) {
       const cardsInNewStateCount = await this.cardRepository.count({
         where: {
@@ -103,16 +112,8 @@ export class CardService {
           state: updateCardStateOrderDto.state,
         },
       });
-      card.order = cardsInNewStateCount + 1;
 
-      await this.cardRepository
-        .createQueryBuilder()
-        .update(CardEntity)
-        .set({ order: () => '"order" - 1' })
-        .where('boardId = :boardId', { boardId: card.board.id })
-        .andWhere('state = :state', { state: card.state })
-        .andWhere('"order" > :order', { order: card.order })
-        .execute();
+      card.order = cardsInNewStateCount + 1;
     }
 
     this.cardRepository.merge(card, updateCardStateOrderDto);
