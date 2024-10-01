@@ -1,39 +1,42 @@
 .board {
-    width: 40%;
-    margin: 10px 0;
-    padding: 10px 15px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2),
+  width: 40%;
+  margin: 10px 0;
+  padding: 10px 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow:
+    0 6px 8px rgba(0, 0, 0, 0.2),
     0 -2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.info>div {
-    font-family: Montserrat Alternates, sans-serif;
-    font-size: 16px;
+.info > div {
+  font-family:
+    Montserrat Alternates,
+    sans-serif;
+  font-size: 16px;
 }
 
-.info>div:first-child {
-    margin-bottom: 7px;
+.info > div:first-child {
+  margin-bottom: 7px;
 }
 
 .icons {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
 }
 
 .icon {
-    margin: 0 3px;
-    display: flex;
-    align-items: center;
-    transition: linear 0.15s;
+  margin: 0 3px;
+  display: flex;
+  align-items: center;
+  transition: linear 0.15s;
 }
 
 .icon:hover {
-    cursor: pointer;
-    fill: #f14949;
-    transition: linear 0.15s;
+  cursor: pointer;
+  fill: #f14949;
+  transition: linear 0.15s;
 }
