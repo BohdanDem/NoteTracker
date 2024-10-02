@@ -12,25 +12,19 @@ $ npm install
 $ npm run start:db
 ```
 
-### 2. To generate migration use the command:
-
-```bash
-$ npm run migration:generate
-```
-
-### 3. To run migration use the command:
+### 2. To run migration use the command:
 
 ```bash
 $ npm run migration:run
 ```
 
-### 4. To start the server use the command:
+### 3. To start the server use the command:
 
 ```bash
 $ npm run start:dev
 ```
 
-### 5. To start the client side application use the command:
+### 4. To start the client side application use the command:
 
 ```bash
 $ npm run start
